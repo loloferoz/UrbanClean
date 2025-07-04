@@ -1,0 +1,107 @@
+<div class="flex flex-row justify-between items-center mb-3">
+  <h2 mat-dialog-title>{{ getTittle() }}</h2>
+  <div class="absolute top-[20px] right-[20px] ng-star-inserted">
+    <button mat-icon-button mat-dialog-close type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-dialog-content class="dialog-p">
+  <mat-stepper
+    [orientation]="responsiveService.smallWidth() ? 'vertical' : 'horizontal'"
+  >
+    <mat-step [stepControl]="form">
+      <form [formGroup]="form" class="grid grid-cols-2 gap-2 py-4">
+        <ng-template matStepLabel i18n="@@word.information"
+          >Information</ng-template
+        >
+
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.name">Name</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.name"
+            placeholder="Name"
+            formControlName="name"
+          />
+          @if (form.get('name')?.hasError('required')) {
+            <mat-error i18n="@@error.name.required">Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.description">Description</mat-label>
+          <textarea
+            matInput
+            i18n-placeholder="@@placeholder.description"
+            placeholder="Descripcion"
+            formControlName="description"
+          ></textarea>
+          @if (form.get('description')?.hasError('required')) {
+            <mat-error i18n="@@error.description.required"
+              >Descripcion is required</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <!-- Type of Center -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.center_type">Type of Center</mat-label>
+          <mat-select formControlName="centerType">
+            @for (ct of centerTypes; track ct) {
+              <mat-option [value]="ct">{{
+                labelCenterType.get(ct)
+              }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('centerType')?.hasError('required')) {
+            <mat-error i18n="@@error.center_type.required"
+              >Type of Center is required</mat-error
+            >
+          }
+        </mat-form-field>
+        <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+          <button
+            mat-flat-button
+            matStepperNext
+            type="button"
+            i18n="@@word.next"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="form">
+      <form id="formCenter" [formGroup]="form" (ngSubmit)="emitAction()">
+        <ng-template matStepLabel i18n="@@word.address">Address</ng-template>
+        <!-- Address -->
+        <app-address-form
+          controlKey="address"
+          [data]="data.center.address"
+          class="w-full"
+        />
+        <div class="flex justify-end gap-x-2 py-2">
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            type="button"
+            i18n="@@word.back"
+          >
+            Back
+          </button>
+          <button
+            mat-flat-button
+            type="submit"
+            form="formCenter"
+            i18n="@@word.ok"
+          >
+            Ok
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>

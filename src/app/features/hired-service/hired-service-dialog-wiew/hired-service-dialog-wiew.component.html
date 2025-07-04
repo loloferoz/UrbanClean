@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>hiredService View</h2>
+<mat-dialog-content>
+  <div>id: {{ hiredService().id }}</div>
+  <div>name: {{ hiredService().name }}</div>
+  <div>description: {{ hiredService().description }}</div>
+  <div>hiredServiceType: {{ hiredService().hiredServiceType }}</div>
+  <div>sectors</div>
+  @for (sector of hiredService().sectors; track $index) {
+    <div>sector: {{ $index }}</div>
+    <div>id: {{ sector.id }}</div>
+    <div>name: {{ sector.name }}</div>
+    <div>description: {{ sector.description }}</div>
+    <div>hiredService: {{ sector.hiredService }}</div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

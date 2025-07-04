@@ -1,0 +1,8 @@
+<section>
+  <app-base-table
+    [data]="locations()"
+    [tableColumns]="tableColumns"
+    [valueFiltered]="valueFiltered()"
+    (actionTable)="action($event)"
+  />
+</section>

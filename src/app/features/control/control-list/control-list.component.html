@@ -1,0 +1,95 @@
+<section>
+  <nav class="grid grid-cols-12 items-baseline sm:gap-5 mb-5 sm:mb-0">
+    <div class="col-span-12 sm:col-span-6 2xl:col-span-5">
+      <app-filter-table [(filter)]="valueToFilter" />
+    </div>
+    <div class="col-span-12 sm:col-span-6 md:col-span-6 sm:mb-5">
+      <div class="w-full md:w-sm">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-description>
+                {{ form.get('date')?.value | date: 'mediumDate' }} |
+                {{ userControl.value || notOperator }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <form
+              id="formSearch"
+              [formGroup]="form"
+              (ngSubmit)="emitAction()"
+              class="flex flex-col mt-3"
+            >
+              <!-- Operator -->
+              <mat-form-field appearance="outline" class="col-span-2">
+                <mat-label i18n="@@word.worker">Worker</mat-label>
+                <input
+                  matInput
+                  type="search"
+                  [formControl]="userControl"
+                  i18n-placeholder="@@placeholder.worker"
+                  placeholder="Worker"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (
+                    user of userControl.value ? filteredUsers() : users();
+                    track user
+                  ) {
+                    <mat-option
+                      [value]="user.name + ' ' + user.surname"
+                      (onSelectionChange)="setUser(user)"
+                    >
+                      {{ user.name }} {{ user.surname }}
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+                @if (form.get('user')?.errors?.['required']) {
+                  <mat-error i18n="@@error.worker.required"
+                    >Worker is required</mat-error
+                  >
+                }
+              </mat-form-field>
+
+              <!-- Day -->
+              <mat-form-field appearance="outline" class="col-span-2">
+                <mat-label i18n="@@word.day">Day</mat-label>
+                <input
+                  matInput
+                  i18n-placeholder="@@placeholder.day"
+                  placeholder="Day"
+                  formControlName="date"
+                  [max]="maxDate"
+                  [matDatepicker]="dayPicker"
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="dayPicker" />
+                <mat-datepicker #dayPicker />
+                @if (form.get('date')?.errors?.['required']) {
+                  <mat-error i18n="@@error.day.required"
+                    >Day is required</mat-error
+                  >
+                }
+              </mat-form-field>
+
+              <button
+                class="col-span-2"
+                mat-flat-button
+                cdkFocusInitial
+                type="submit"
+                form="formSearch"
+                i18n="@@word.ok"
+              >
+                Ok
+              </button>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </nav>
+  <app-base-table
+    [data]="controls()"
+    [tableColumns]="tableColumns"
+    [valueFiltered]="valueToFilter()"
+    (actionTable)="action($event)"
+  />
+</section>

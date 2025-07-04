@@ -1,0 +1,118 @@
+<form
+  [formGroupName]="controlKey()"
+  class="grid grid-cols-2 gap-y-1 gap-x-3 py-4"
+>
+  <!-- Country -->
+  <mat-form-field appearance="outline" class="col-span-2">
+    <mat-label i18n="@@word.country">Country</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.country"
+      placeholder="Country"
+      formControlName="country"
+    />
+    @if (
+      parentFormGroup.get(controlKey())?.get('country')?.hasError('required')
+    ) {
+      <mat-error i18n="@@error.country.required">Country is required</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- community -->
+  <mat-form-field appearance="outline" class="col-span-2">
+    <mat-label i18n="@@word.community">Community</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.community"
+      placeholder="Community"
+      formControlName="community"
+    />
+    @if (
+      parentFormGroup.get(controlKey())?.get('community')?.hasError('required')
+    ) {
+      <mat-error i18n="@@error.community.required"
+        >Community is required</mat-error
+      >
+    }
+  </mat-form-field>
+
+  <!-- City -->
+  <mat-form-field appearance="outline" class="col-span-2">
+    <mat-label i18n="@@word.city">City</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.city"
+      placeholder="City"
+      formControlName="city"
+    />
+    @if (parentFormGroup.get(controlKey())?.get('city')?.hasError('required')) {
+      <mat-error i18n="@@error.city.required">City is required</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Street -->
+  <mat-form-field appearance="outline" class="col-span-2">
+    <mat-label i18n="@@word.street">Street</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.street"
+      placeholder="Street"
+      formControlName="street"
+    />
+    @if (
+      parentFormGroup.get(controlKey())?.get('street')?.hasError('required')
+    ) {
+      <mat-error i18n="@@error.street.required">Street is required</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Number -->
+  <mat-form-field class="col-span-2 sm:col-span-1" appearance="outline">
+    <mat-label i18n="@@word.number">Number</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.number"
+      placeholder="Number"
+      formControlName="number"
+      type="number"
+    />
+    @if (
+      parentFormGroup.get(controlKey())?.get('number')?.hasError('required')
+    ) {
+      <mat-error i18n="@@error.number.required">Number is required</mat-error>
+    }
+    @if (parentFormGroup.get(controlKey())?.get('number')?.hasError('min')) {
+      <mat-error i18n="@@error.number.min">The minimum number is 1</mat-error>
+    }
+    @if (parentFormGroup.get(controlKey())?.get('number')?.hasError('max')) {
+      <mat-error i18n="@@error.number.max"
+        >The maximum number is {{ '500' }}</mat-error
+      >
+    }
+  </mat-form-field>
+
+  <!-- Postal Code -->
+  <mat-form-field class="col-span-2 sm:col-span-1" appearance="outline">
+    <mat-label i18n="@@word.zipCode">Zip Code</mat-label>
+    <input
+      matInput
+      i18n-placeholder="@@placeholder.zipCode"
+      placeholder="Zip Code"
+      formControlName="zipCode"
+    />
+    @if (
+      parentFormGroup.get(controlKey())?.get('zipCode')?.hasError('required')
+    ) {
+      <mat-error i18n="@@error.zipCode.required"
+        >Zip Code is required</mat-error
+      >
+    }
+    @if (
+      parentFormGroup.get(controlKey())?.get('zipCode')?.hasError('pattern')
+    ) {
+      <mat-error i18n="@@error.zipCode.pattern"
+        >Zip Code must contain 5 numbers</mat-error
+      >
+    }
+  </mat-form-field>
+</form>

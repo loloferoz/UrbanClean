@@ -1,0 +1,20 @@
+<app-top-nav (sideNavToggled)="sidenav.toggle()"></app-top-nav>
+<mat-sidenav-container
+  [style.height]="'calc(100vh - ' + toolBarHeight() + 'px'"
+>
+  <mat-sidenav
+    [autoFocus]="false"
+    #sidenav
+    [mode]="sideNavMode()"
+    [opened]="sideNavOpened()"
+  >
+    <app-side-nav
+      [isLargeWidth]="responsiveService.largeWidth()"
+      (sideNavToggled)="sidenav.toggle()"
+    ></app-side-nav>
+  </mat-sidenav>
+  <mat-sidenav-content class="p-4 sm:p-6">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<app-spinner />

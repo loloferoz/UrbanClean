@@ -1,0 +1,96 @@
+<h2 mat-dialog-title>{{ getTittle() }}</h2>
+<mat-dialog-content>
+  <form
+    id="formElement"
+    [formGroup]="form"
+    (ngSubmit)="emitAction()"
+    class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+  >
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.name">Name</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.name"
+        placeholder="Name"
+        formControlName="name"
+      />
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error i18n="@@error.name.required">Name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.description">Description</mat-label>
+      <textarea
+        matInput
+        i18n-placeholder="@@placeholder.description"
+        placeholder="Descripcion"
+        formControlName="description"
+      ></textarea>
+      @if (form.get('description')?.hasError('required')) {
+        <mat-error i18n="@@error.description.required"
+          >Descripcion is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Type of Element -->
+    <mat-form-field class="col-span-2 sm:col-span-1" appearance="outline">
+      <mat-label i18n="@@word.element_type">Type of Element</mat-label>
+      <mat-select formControlName="elementType">
+        @for (et of elementType; track et) {
+          <mat-option [value]="et">{{ labelElementType.get(et) }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('elementType')?.hasError('required')) {
+        <mat-error class="sm:pb-4" i18n="@@error.element_type.required"
+          >Type of Element is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Capacity -->
+    <mat-form-field class="col-span-2 sm:col-span-1" appearance="outline">
+      <mat-label i18n="@@word.capacity">Capacity</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.capacity"
+        placeholder="Capacity"
+        formControlName="capacity"
+        type="number"
+      />
+      @if (form.get('capacity')?.hasError('required')) {
+        <mat-error i18n="@@error.number.required">Number is required</mat-error>
+      }
+      @if (form.get('capacity')?.hasError('min')) {
+        <mat-error i18n="@@error.number.min">The minimum number is 1</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Image -->
+    <app-image-input
+      class="col-span-2 mr-auto"
+      [selectedImage]="image"
+      (fileEmitter)="setFile($event)"
+      [hasError]="
+        form.get('image')?.touched && form.get('image')?.hasError('required')
+      "
+    />
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formElement"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

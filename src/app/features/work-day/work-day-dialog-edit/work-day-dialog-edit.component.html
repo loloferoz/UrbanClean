@@ -1,0 +1,137 @@
+<h2 mat-dialog-title>{{ getTittle() }}</h2>
+<mat-dialog-content>
+  <form
+    id="formSector"
+    [formGroup]="form"
+    (ngSubmit)="emitAction()"
+    class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+  >
+    <!-- Day -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.day">Day</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.day"
+        placeholder="Day"
+        formControlName="day"
+        [min]="minDate"
+        [matDatepicker]="dayPicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="dayPicker" />
+      <mat-datepicker #dayPicker />
+      @if (form.get('day')?.errors?.['required']) {
+        <mat-error i18n="@@error.day.required">Day is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- start -->
+    <mat-form-field appearance="outline" class="col-span-2 sm:col-span-1">
+      <mat-label i18n="@@word.start">Start</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.start"
+        placeholder="Start"
+        formControlName="start"
+        [matTimepicker]="startPicker"
+      />
+      <mat-timepicker-toggle matIconSuffix [for]="startPicker" />
+      <mat-timepicker #startPicker />
+      @if (form.get('start')?.errors?.['required']) {
+        <mat-error i18n="@@error.start.required">Start is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- finish -->
+    <mat-form-field appearance="outline" class="col-span-2 sm:col-span-1">
+      <mat-label i18n="@@word.finish">Finish</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.finish"
+        placeholder="Finish"
+        formControlName="finish"
+        [matTimepicker]="finishPicker"
+      />
+      <mat-timepicker-toggle matIconSuffix [for]="finishPicker" />
+      <mat-timepicker #finishPicker />
+      @if (form.get('finish')?.errors?.['required']) {
+        <mat-error i18n="@@error.finish.required">Finish is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Operator -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.worker">Worker</mat-label>
+      <input
+        matInput
+        type="search"
+        [formControl]="userControl"
+        i18n-placeholder="@@placeholder.worker"
+        placeholder="Worker"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (user of filteredUsers(); track user) {
+          <mat-option
+            [value]="user.name + ' ' + user.surname"
+            (onSelectionChange)="setUser(user)"
+          >
+            {{ user.name }} {{ user.surname }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+      @if (form.get('user')?.errors?.['required']) {
+        <mat-error i18n="@@error.worker.required">Worker is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Services -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Service</mat-label>
+      <mat-select
+        formControlName="hiredService"
+        (selectionChange)="setService($event.value)"
+      >
+        @for (hiredService of data.hiredServices; track hiredService) {
+          <mat-option [value]="hiredService.id">{{
+            hiredService.name
+          }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('hiredService')?.hasError('required')) {
+        <mat-error i18n="@@error.hired_service.required"
+          >Service is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Sector -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Sector</mat-label>
+      <mat-select
+        formControlName="sector"
+        [required]="(sectors()?.length ?? 0) > 0"
+      >
+        @for (sector of sectors(); track sector) {
+          <mat-option [value]="sector.id">{{ sector.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('sector')?.hasError('required')) {
+        <mat-error i18n="@@error.sector.required">Sector is required</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formSector"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

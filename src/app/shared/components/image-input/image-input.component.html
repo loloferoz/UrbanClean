@@ -1,0 +1,45 @@
+<div class="flex justify-center">
+  <div class="relative">
+    @if (imagePath()) {
+      <img
+        [src]="imagePath()"
+        tabindex="0"
+        (click)="openBottomSheet()"
+        (keyup.enter)="openBottomSheet()"
+        class="size-40 rounded-md border border-outline cursor-pointer"
+        alt="imagePath()"
+      />
+    } @else {
+      <div
+        [ngClass]="
+          hasError()
+            ? 'border-error hover:border-on-error-container'
+            : 'border-current hover:border-primary'
+        "
+        class="size-40 flex items-center justify-center text-8xl rounded-md border hover:border-2 cursor-pointer"
+        tabindex="0"
+        (click)="openBottomSheet()"
+        (keyup.enter)="openBottomSheet()"
+      >
+        <div>
+          <mat-icon class="icon-wght-200" aria-hidden="false" [inline]="true"
+            >no_photography</mat-icon
+          >
+        </div>
+      </div>
+      @if (hasError()) {
+        <div i18n="@@error.image" class="ml-4 my-1 text-xs text-error">
+          Image is required
+        </div>
+      }
+    }
+    <input
+      type="file"
+      capture="enviroment"
+      accept="image/png, image/jpeg"
+      hidden
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+  </div>
+</div>

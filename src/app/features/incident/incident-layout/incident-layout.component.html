@@ -1,0 +1,46 @@
+<section class="h-[calc(100vh_-_215px)] sm:h-[calc(100vh_-_180px)]">
+  <nav
+    class="grid grid-cols-12 justify-self-stretch items-baseline sm:gap-5 mb-5 sm:mb-0"
+  >
+    @if (viewMap()) {
+      <app-filter-autocomplete-map
+        class="col-span-12 sm:col-span-7 md:col-span-6 2xl:col-span-5"
+        [locations]="locations()"
+        (filter)="setFilter($event)"
+      ></app-filter-autocomplete-map>
+    } @else {
+      <app-filter-table
+        class="col-span-12 sm:col-span-7 md:col-span-6 2xl:col-span-5"
+        [(filter)]="valueToFilter"
+      />
+    }
+    <app-toggle-map
+      class="col-span-12 sm:col-span-5 md:col-span-6 2xl:col-span-7 sm:justify-self-end"
+      [view]="tabMap.TABLE"
+      (viewChange)="changeView($event)"
+    ></app-toggle-map>
+  </nav>
+  <div class="grid grid-cols-2 h-full w-full gap-x-5">
+    @if (viewTable()) {
+      @defer {
+        <div class="w-full" [ngClass]="{ 'col-span-2': !viewMap() }">
+          <app-incident-list
+            (dataMap)="action($event)"
+            [valueFiltered]="valueToFilter()"
+          ></app-incident-list>
+        </div>
+      }
+    }
+    @if (viewMap()) {
+      @defer {
+        <div class="w-full" [ngClass]="{ 'col-span-2': !viewTable() }">
+          <app-view-map
+            [locations]="locations()"
+            [typeLocationMap]="typeLocationMap()"
+            (dataMap)="action($event)"
+          />
+        </div>
+      }
+    }
+  </div>
+</section>

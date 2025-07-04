@@ -1,0 +1,62 @@
+<div class="w-full max-w-lg text-center space-y-8">
+  <div class="space-y-4">
+    <div
+      class="m-auto size-20 bg-primary-container rounded-full flex items-center justify-center"
+    >
+      <div class="text-5xl mt-2">
+        <mat-icon class="icon-wght-400" aria-hidden="false" [inline]="true"
+          >task_alt</mat-icon
+        >
+      </div>
+    </div>
+    <h1
+      class="text-3xl tracking-wide font-bold mt-2"
+      i18n="@@register.redirect_register.title"
+    >
+      Registration Successful!
+    </h1>
+  </div>
+
+  <div class="bg-secondary-container rounded-xl p-6 space-y-4">
+    <div class="flex justify-center items-center space-x-3">
+      <div class="text-3xl mt-2">
+        <mat-icon class="icon-wght-300" aria-hidden="false" [inline]="true"
+          >mail</mat-icon
+        >
+      </div>
+      <h2
+        class="text-xl font-semibold text-on-tertiary-container"
+        i18n="@@register.redirect.title"
+      >
+        Check your email
+      </h2>
+    </div>
+    <p
+      class="text-on-tertiary-container"
+      i18n="@@register.redirect_register.body"
+    >
+      We've sent a verification email to your email address. Please check your
+      inbox and click the link to complete your registration.
+    </p>
+  </div>
+
+  <div class="space-y-6 pt-4">
+    <div class="space-y-2">
+      <p class="text-inverse-surface" i18n="@@register.redirect.progress">
+        You will be redirected to the control panel in
+        <span class="font-bold">{{ timeLeft() }}</span> seconds.
+      </p>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="timeLeft() * 20"
+      ></mat-progress-bar>
+      <p class="text-sm text-outline" i18n="@@world.redirect">Redirecting...</p>
+    </div>
+    <a
+      mat-flat-button
+      routerLink="/auth/login"
+      i18n="@@register.redirect.botton"
+      >Go to the panel now</a
+    >
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<section>
+  <app-header-work-day
+    [iconCreate]="iconCreate"
+    [labelCreate]="labelCreate"
+    (newItem)="create()"
+    (day)="setDay($event)"
+  >
+    <app-filter-table [(filter)]="valueToFilter" />
+  </app-header-work-day>
+  <app-base-table
+    [data]="tableWorkDays()"
+    [tableColumns]="tableColumns"
+    [valueFiltered]="valueToFilter()"
+    (actionTable)="action($event)"
+  />
+</section>

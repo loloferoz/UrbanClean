@@ -1,0 +1,16 @@
+<section class="h-[calc(100vh_-_215px)] sm:h-[calc(100vh_-_175px)]">
+  <nav
+    class="grid grid-cols-12 justify-self-stretch items-baseline sm:gap-5 mb-5 sm:mb-0"
+  >
+    <app-filter-autocomplete-map
+      class="col-span-12 sm:col-span-7 md:col-span-6 2xl:col-span-5"
+      [locations]="locations()"
+      (filter)="setFilter($event)"
+    ></app-filter-autocomplete-map>
+  </nav>
+  <app-view-map
+    [locations]="locations()"
+    (dataMap)="action($event)"
+    [typeLocationMap]="typeLocationMap()"
+  />
+</section>

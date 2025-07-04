@@ -1,0 +1,101 @@
+<h2 mat-dialog-title i18n="@@word.employee">Employee</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-3 py-4">
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.name">Name</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl pt-1">
+          <mat-icon aria-hidden="false" [inline]="true">perm_identity</mat-icon>
+        </div>
+        {{ user().name + ' ' + user().surname }}
+      </dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.email">E-Mail</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl pt-1">
+          <mat-icon aria-hidden="false" [inline]="true">email</mat-icon>
+        </div>
+        {{ user().email }}
+      </dd>
+    </dl>
+    <dl class="col-span-2 sm:col-span-1">
+      <dt class="font-semibold" i18n="@@word.date">Date</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl pt-1">
+          <mat-icon aria-hidden="false" [inline]="true"
+            >calendar_month</mat-icon
+          >
+        </div>
+        {{ user().dateOfBirth | date: 'longDate' }}
+      </dd>
+    </dl>
+    <dl class="col-span-2 sm:col-span-1">
+      <dt class="font-semibold" i18n="@@word.user_type">Type of Employee</dt>
+      <dd class="mt-1">
+        <mat-chip>{{ labelUserRole.get(user().userRole) }}</mat-chip>
+      </dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.address">Address</dt>
+      <dd class="ml-7">
+        {{ user().address.country + ', ' + user().address.community }}
+      </dd>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl pt-1">
+          <mat-icon aria-hidden="false" [inline]="true">location_on</mat-icon>
+        </div>
+        {{
+          user().address.city +
+            ', ' +
+            user().address.street +
+            ' ' +
+            user().address.number +
+            ', ' +
+            user().address.zipCode
+        }}
+      </dd>
+    </dl>
+    <div class="col-span-2 font-bold text-base" i18n="@@word.contract">
+      Contract
+    </div>
+    <dl class="col-span-2 sm:col-span-1">
+      <dt class="font-semibold" i18n="@@word.start">Start</dt>
+      <dd>{{ user().contract.start | date: 'longDate' }}</dd>
+    </dl>
+    <dl class="col-span-2 sm:col-span-1">
+      <dt class="font-semibold" i18n="@@word.finish">Finish</dt>
+      @if (user().contract.finish) {
+        <dd>{{ user().contract.finish | date: 'longDate' }}</dd>
+      } @else {
+        <dd i18n="@@word.indefinite">Indefinite</dd>
+      }
+    </dl>
+    <dl class="col-span-1">
+      <dt class="font-semibold" i18n="@@word.contract_category">Category</dt>
+      <dd class="mt-1">
+        <mat-chip>{{
+          labelContractCategory.get(user().contract.contractCategory)
+        }}</mat-chip>
+      </dd>
+    </dl>
+    <dl class="col-span-1">
+      <dt class="font-semibold" i18n="@@word.contract_turn">Shift</dt>
+      <dd class="mt-1">
+        <mat-chip>{{
+          labelContractTurn.get(user().contract.contractTurn)
+        }}</mat-chip>
+      </dd>
+    </dl>
+  </div>
+  <dl class="col-span-2">
+    <dt class="font-semibold" i18n="@@word.work_day">Working Day</dt>
+    <dd>{{ user().contract.workingDay }}</dd>
+  </dl>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

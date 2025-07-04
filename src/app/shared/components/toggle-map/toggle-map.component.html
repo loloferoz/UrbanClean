@@ -1,0 +1,22 @@
+<div>
+  <mat-button-toggle-group
+    class="w-full"
+    [(value)]="view"
+    (change)="setView($event.value)"
+  >
+    <mat-button-toggle class="w-full" [value]="tabMap.TABLE" i18n="@@word.table"
+      >Table</mat-button-toggle
+    >
+    @if (!responsiveService.smallWidth()) {
+      <mat-button-toggle
+        class="w-full"
+        [value]="tabMap.ALL"
+        i18n="@@word.table_map"
+        >Table / Map</mat-button-toggle
+      >
+    }
+    <mat-button-toggle class="w-full" [value]="tabMap.MAP" i18n="@@word.map"
+      >Map</mat-button-toggle
+    >
+  </mat-button-toggle-group>
+</div>

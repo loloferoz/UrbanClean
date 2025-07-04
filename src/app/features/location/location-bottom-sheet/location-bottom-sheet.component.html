@@ -1,0 +1,16 @@
+<mat-nav-list>
+  <a href="" mat-list-item (click)="getLocation($event)">
+    <mat-icon matListItemIcon>location_on</mat-icon>
+    <span matListItemTitle i18n="@@location.update">Update Location</span>
+  </a>
+  @for (epl of data.location.elementPerLocations; track epl.id) {
+    <a href="" mat-list-item (click)="getElement(epl, $event)">
+      @if (epl.element.elementType === elementType.ORGANIC) {
+        <mat-icon matListItemIcon [svgIcon]="'laSolidDumpster'"></mat-icon>
+      } @else {
+        <mat-icon matListItemIcon>{{ getIcon(epl.element) }}</mat-icon>
+      }
+      <span matListItemTitle>{{ epl.element.name }}</span>
+    </a>
+  }
+</mat-nav-list>

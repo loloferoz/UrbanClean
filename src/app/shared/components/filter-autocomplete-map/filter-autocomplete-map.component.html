@@ -1,0 +1,23 @@
+<div>
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label i18n="@@word.search">Search</mat-label>
+    <input
+      matInput
+      type="search"
+      [formControl]="filterControl"
+      i18n-placeholder="@@placeholder.search"
+      placeholder="Search....."
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (location of filteredlocations(); track location.id) {
+        <mat-option
+          [value]="location.street"
+          (onSelectionChange)="setCenter(location)"
+        >
+          {{ location.street }} {{ location.number }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

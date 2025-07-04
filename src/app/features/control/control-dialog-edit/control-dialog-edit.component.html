@@ -1,0 +1,59 @@
+<h2 mat-dialog-title i18n="@@control.create">Create a new Control</h2>
+<mat-dialog-content>
+  <form
+    id="formControl"
+    [formGroup]="form"
+    (ngSubmit)="emitAction()"
+    class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+  >
+    <!-- Observation -->
+    <mat-form-field class="col-span-2" appearance="outline">
+      <mat-label i18n="@@word.observation">Observation</mat-label>
+      <textarea
+        matInput
+        i18n-placeholder="@@placeholder.observation"
+        placeholder="Observation"
+        formControlName="observation"
+      ></textarea>
+    </mat-form-field>
+
+    <!-- Control Status -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.control_status">Control Status</mat-label>
+      <mat-select formControlName="controlStatus">
+        @for (cs of controlStatus; track cs) {
+          <mat-option [value]="cs">{{ labelControlStatus.get(cs) }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('controlStatus')?.hasError('required')) {
+        <mat-error i18n="@@error.control_status.required"
+          >Control Status is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Image -->
+    <app-image-input
+      class="col-span-2 mr-auto"
+      [selectedImage]="image"
+      (fileEmitter)="setFile($event)"
+      [hasError]="
+        form.get('image')?.touched && form.get('image')?.hasError('required')
+      "
+    ></app-image-input>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formControl"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

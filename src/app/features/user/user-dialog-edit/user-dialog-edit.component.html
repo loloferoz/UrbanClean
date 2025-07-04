@@ -1,0 +1,354 @@
+<div class="flex flex-row justify-between items-center mb-3">
+  <h2 mat-dialog-title>{{ getTittle() }}</h2>
+  <div class="absolute top-[20px] right-[20px] ng-star-inserted">
+    <button mat-icon-button mat-dialog-close type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-dialog-content class="dialog-p">
+  <mat-stepper
+    [orientation]="responsiveService.smallWidth() ? 'vertical' : 'horizontal'"
+  >
+    <mat-step [stepControl]="form">
+      <form
+        [formGroup]="form"
+        class="grid grid-cols-2 gap-2 gap-y-1 gap-x-3 py-4"
+      >
+        <ng-template matStepLabel i18n="@@word.personal">Personal</ng-template>
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.name">Name</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.name"
+            placeholder="Name"
+            formControlName="name"
+          />
+          <mat-icon matSuffix>perm_identity</mat-icon>
+          @if (form.get('name')?.hasError('required')) {
+            <mat-error i18n="@@error.name.required">Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Surname -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.surname">Surname</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.surname"
+            placeholder="Surname"
+            formControlName="surname"
+          />
+          <mat-icon matSuffix>perm_identity</mat-icon>
+          @if (form.get('surname')?.hasError('required')) {
+            <mat-error i18n="@@error.surname.required"
+              >Surname is required</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <!-- Date -->
+        <mat-form-field
+          appearance="outline"
+          class="col-span-2"
+          [ngClass]="form.get('dateOfBirth')?.errors ? 'pb-4 sm:pb-0' : ''"
+        >
+          <mat-label i18n="@@word.date">Date</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.date"
+            placeholder="DD/MM/YYYY"
+            formControlName="dateOfBirth"
+            [matDatepicker]="dateOfBirthPicker"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="dateOfBirthPicker" />
+          <mat-datepicker #dateOfBirthPicker />
+          @if (form.get('dateOfBirth')?.errors?.['required']) {
+            <mat-error i18n="@@error.date.required"
+              >Birth date is required</mat-error
+            >
+          }
+          @if (
+            !form.get('dateOfBirth')?.errors?.['required'] &&
+              form.get('dateOfBirth')?.errors?.['ageTooLow'];
+            as ageTooLow
+          ) {
+            <mat-error i18n="@@error.date.age_too_low"
+              >You have to be {{ ageTooLow.requiredAge }} or older to access
+              this site.</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.email">E-Mail</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.email"
+            placeholder="E-Mail"
+            formControlName="email"
+            type="email"
+          />
+          <mat-icon matSuffix>email</mat-icon>
+          @if (form.get('email')?.hasError('required')) {
+            <mat-error i18n="@@error.email.required"
+              >Email is required</mat-error
+            >
+          }
+          @if (form.get('email')?.errors?.['email']) {
+            <mat-error i18n="@@error.email.is_mail">Invalid email</mat-error>
+          }
+          @if (
+            !form.get('email')?.errors?.['email'] &&
+              form.get('email')?.errors?.['emailDomain'];
+            as emailErrors
+          ) {
+            <ng-container matError>
+              <mat-error i18n="@@error.email.email_domain"
+                >Please use allowed google domains</mat-error
+              >
+            </ng-container>
+          }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.password">Password</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.password"
+            placeholder="Password"
+            formControlName="password"
+            [type]="hide() ? 'password' : 'text'"
+            [required]="data.isNew"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('password')?.hasError('required')) {
+            <mat-error i18n="@@error.password.required"
+              >Password is required</mat-error
+            >
+          }
+          @if (form.get('password')?.hasError('minlength')) {
+            <mat-error i18n="@@error.password.minlength"
+              >Password should contain more than 8 letters</mat-error
+            >
+          }
+          @if (form.get('password')?.hasError('maxlength')) {
+            <mat-error i18n="@@error.password.maxlength"
+              >Password should contain less than 25 letters</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <!-- Confirm Password -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.password_confirm">Confirm password</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.password_confirm"
+            placeholder="Confirm password"
+            formControlName="confirmPassword"
+            [type]="hide() ? 'password' : 'text'"
+            [required]="data.isNew"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('confirmPassword')?.hasError('required')) {
+            <mat-error i18n="@@error.password.required"
+              >Password is required</mat-error
+            >
+          }
+          @if (form.get('confirmPassword')?.hasError('mismatch')) {
+            <mat-error i18n="@@error.password.mismatch"
+              >Passwords do not match</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+          <button
+            mat-flat-button
+            matStepperNext
+            type="button"
+            i18n="@@word.next"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="form">
+      <form [formGroup]="form">
+        <ng-template matStepLabel i18n="@@word.address">Address</ng-template>
+        <!-- Address -->
+        <app-address-form
+          controlKey="address"
+          [data]="data.user.address"
+          class="w-full"
+        />
+        <div class="flex justify-end gap-x-2 py-2">
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            type="button"
+            i18n="@@word.back"
+          >
+            Back
+          </button>
+          <button
+            mat-flat-button
+            matStepperNext
+            type="button"
+            i18n="@@word.next"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="form">
+      <form [formGroup]="form">
+        <ng-template matStepLabel i18n="@@word.contract">Contract</ng-template>
+        <div formGroupName="contract" class="grid grid-cols-2 gap-2 py-4">
+          <!-- Start -->
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label i18n="@@word.start">Start</mat-label>
+            <input
+              matInput
+              i18n-placeholder="@@placeholder.start"
+              placeholder="Start"
+              formControlName="start"
+              [matDatepicker]="startPicker"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker" />
+            <mat-datepicker #startPicker />
+            @if (form.get('contract')?.get('start')?.errors?.['required']) {
+              <mat-error i18n="@@error.start.required"
+                >Start is required</mat-error
+              >
+            }
+          </mat-form-field>
+
+          <!-- Finish -->
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label i18n="@@word.finish">Finish</mat-label>
+            <input
+              matInput
+              i18n-placeholder="@@placeholder.finish"
+              placeholder="Finish"
+              formControlName="finish"
+              [matDatepicker]="finishPicker"
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="finishPicker" />
+            <mat-datepicker #finishPicker />
+          </mat-form-field>
+
+          <!-- Working Day -->
+          <mat-form-field class="col-span-2 sm:col-span-2" appearance="outline">
+            <mat-label i18n="@@word.work_day">Working Day</mat-label>
+            <input
+              matInput
+              i18n-placeholder="@@placeholder.work_day"
+              placeholder="Working Day"
+              formControlName="workingDay"
+              type="number"
+            />
+            @if (
+              form.get('contract')?.get('workingDay')?.hasError('required')
+            ) {
+              <mat-error i18n="@@error.number.required"
+                >Number is required</mat-error
+              >
+            }
+            @if (form.get('contract')?.get('workingDay')?.hasError('min')) {
+              <mat-error i18n="@@error.number.min"
+                >The minimum number is 1</mat-error
+              >
+            }
+            @if (form.get('contract')?.get('workingDay')?.hasError('max')) {
+              <mat-error i18n="@@error.number.max"
+                >The maximum number is {{ '40' }}</mat-error
+              >
+            }
+          </mat-form-field>
+
+          <!-- Contract Category -->
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label i18n="@@word.contract_category">Category</mat-label>
+            <mat-select formControlName="contractCategory">
+              @for (cc of contractCategory; track cc) {
+                <mat-option [value]="cc">{{
+                  labelContractCategory.get(cc)
+                }}</mat-option>
+              }
+            </mat-select>
+            @if (
+              form
+                .get('contract')
+                ?.get('contractCategory')
+                ?.hasError('required')
+            ) {
+              <mat-error i18n="@@error.contract_category.required"
+                >Category is required</mat-error
+              >
+            }
+          </mat-form-field>
+
+          <!-- Contract turn -->
+          <mat-form-field appearance="outline" class="col-span-2">
+            <mat-label i18n="@@word.contract_turn">Shift</mat-label>
+            <mat-select formControlName="contractTurn">
+              @for (ct of contractTurn; track ct) {
+                <mat-option [value]="ct">{{
+                  labelContractTurn.get(ct)
+                }}</mat-option>
+              }
+            </mat-select>
+            @if (
+              form.get('contract')?.get('contractTurn')?.hasError('required')
+            ) {
+              <mat-error i18n="@@error.contract_turn.required"
+                >Shift is required</mat-error
+              >
+            }
+          </mat-form-field>
+          <div class="col-span-2 flex justify-end gap-x-2 py-2">
+            <button
+              mat-stroked-button
+              matStepperPrevious
+              type="button"
+              i18n="@@word.back"
+            >
+              Back
+            </button>
+            <button
+              mat-flat-button
+              (click)="emitAction()"
+              type="submit"
+              i18n="@@word.ok"
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
