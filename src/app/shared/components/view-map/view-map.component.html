@@ -1,0 +1,306 @@
+<div class="h-full w-full">
+  <google-map
+    #map
+    height="100%"
+    width="100%"
+    [options]="options()"
+    [mapTypeId]="mapType()"
+    [zoom]="zoom()"
+    [center]="{
+      lat: +center().latitude,
+      lng: +center().longitude,
+    }"
+    (mapClick)="setLocation($event)"
+  >
+    <!-- Current Position -->
+    <div class="flex h-4 w-4" #marckerCurrentPosition>
+      <span class="inline-flex rounded-full h-4 w-4 bg-blue-500"></span>
+      <span
+        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"
+      ></span>
+    </div>
+    <map-advanced-marker
+      #marker="mapAdvancedMarker"
+      [position]="{
+        lat: +currentPosition().latitude,
+        lng: +currentPosition().longitude,
+      }"
+      [content]="marckerCurrentPosition"
+      [zIndex]="50"
+      [title]="
+        currentPosition().city +
+        '\n' +
+        currentPosition().street +
+        ' ' +
+        currentPosition().number
+      "
+    />
+
+    @if (
+      selectedAction() === actionMap.CREATE ||
+      selectedAction() === actionMap.MOVE
+    ) {
+      <!-- New -->
+      <div #marckerNew class="animate-bounce size-9 text-4xl icon-fill">
+        <mat-icon aria-hidden="false" [inline]="true" class="icon-primary"
+          >location_on</mat-icon
+        >
+      </div>
+      <map-advanced-marker
+        [position]="{
+          lat: +newLocation().latitude,
+          lng: +newLocation().longitude,
+        }"
+        [content]="marckerNew"
+        [gmpDraggable]="draggable()"
+        (mapClick)="create($event)"
+      />
+    }
+
+    @if (typeLocationMap().LocationType === locationType.ELEMENTS) {
+      @for (location of locations(); track location.id) {
+        @if (location.elementPerLocations?.length === 0) {
+          <!-- Withiout Elements -->
+          <div #marckerWithoutElements class="flex h-6 w-6">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"
+            ></span>
+          </div>
+          <map-advanced-marker
+            #marker="mapAdvancedMarker"
+            [position]="{ lat: +location.latitude, lng: +location.longitude }"
+            [content]="marckerWithoutElements"
+            [gmpDraggable]="draggable()"
+            [title]="
+              location.city + '\n' + location.street + ' ' + location.number
+            "
+            (mapClick)="action($event, location)"
+          >
+          </map-advanced-marker>
+        } @else if (
+          findElementType(location.elementPerLocations, elementType.LITTER_BIN)
+        ) {
+          <!-- Litter bin -->
+          <div
+            #marckerBin
+            class="text-xs bg-secondary-container text-on-surface-container w-8 h-8 flex justify-center items-center rounded-full"
+          >
+            <mat-icon aria-hidden="false" class="icon-fill">delete</mat-icon>
+          </div>
+          <map-advanced-marker
+            #marker="mapAdvancedMarker"
+            [position]="{ lat: +location.latitude, lng: +location.longitude }"
+            [content]="marckerBin"
+            [gmpDraggable]="draggable()"
+            [title]="
+              location.city + '\n' + location.street + ' ' + location.number
+            "
+            (mapClick)="action($event, location)"
+          >
+          </map-advanced-marker>
+        } @else {
+          <!-- Element -->
+          <div
+            #marckerBin
+            class="text-base bg-secondary-container text-on-surface-container w-8 h-8 flex justify-center items-center rounded-full"
+          >
+            <mat-icon aria-hidden="false" class="icon-fill">package_2</mat-icon>
+          </div>
+          <map-advanced-marker
+            #marker="mapAdvancedMarker"
+            [position]="{ lat: +location.latitude, lng: +location.longitude }"
+            [content]="marckerBin"
+            [gmpDraggable]="draggable()"
+            [title]="
+              location.city + '\n' + location.street + ' ' + location.number
+            "
+            (mapClick)="action($event, location)"
+          >
+          </map-advanced-marker>
+        }
+      }
+    } @else {
+      @for (location of locations(); track location.id) {
+        <!-- Elements Selected -->
+        <div
+          #marckerDumpster
+          class="text-xs bg-secondary-container text-on-secondary-container w-8 h-8 flex justify-center items-center rounded-full"
+        >
+          @if (typeLocationMap().icon === 'faSolidDumpster') {
+            <mat-icon
+              aria-hidden="false"
+              class="dumpster-mini"
+              [svgIcon]="typeLocationMap().icon ?? ''"
+            ></mat-icon>
+          } @else {
+            <mat-icon aria-hidden="false" class="icon-fill">{{
+              typeLocationMap().icon
+            }}</mat-icon>
+          }
+        </div>
+        <map-advanced-marker
+          #marker="mapAdvancedMarker"
+          [position]="{ lat: +location.latitude, lng: +location.longitude }"
+          [content]="marckerDumpster"
+          [gmpDraggable]="draggable()"
+          [title]="
+            location.city + '\n' + location.street + ' ' + location.number
+          "
+          (mapClick)="action($event, location)"
+        />
+      }
+    }
+  </google-map>
+  <!-- menuType -->
+  <div #menuType class="m-3">
+    @if (responsiveService.largeWidth()) {
+      <button mat-fab extended [matMenuTriggerFor]="menu">
+        <mat-icon>map</mat-icon>
+        Map
+      </button>
+    } @else if (responsiveService.mediumWidth()) {
+      <button mat-fab [matMenuTriggerFor]="menu">
+        <mat-icon>map</mat-icon>
+      </button>
+    } @else {
+      <button mat-mini-fab [matMenuTriggerFor]="menu">
+        <mat-icon>map</mat-icon>
+      </button>
+    }
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="mapType.set(MapTypeId.ROADMAP)">
+        ROADMAP
+      </button>
+      <button mat-menu-item (click)="mapType.set(MapTypeId.HYBRID)">
+        HYBRID
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- cardSearch -->
+  <div #cardSearch class="relative m-2 sm:m-4">
+    <input
+      #searchInput
+      type="search"
+      [placeholder]="placeholder()"
+      class="relative w-full h-10 px-4 pr-12 bg-surface-container-lowest text-sm transition-all border rounded-lg outline-none focus-visible:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+    />
+    <mat-icon aria-hidden="false" class="absolute top-2 right-2"
+      >search</mat-icon
+    >
+  </div>
+
+  <!-- menuZoom -->
+  <div
+    #menuZoom
+    class="m-2 flex flex-col-reverse md:flex-row-reverse items-end gap-3"
+  >
+    <div>
+      <button mat-mini-fab (click)="showMenu.set(!showMenu())">
+        <mat-icon>open_run</mat-icon>
+      </button>
+    </div>
+    @if (showMenu()) {
+      <div class="grid grid-cols-3 gap-3">
+        <button
+          mat-mini-fab
+          class="col-start-2"
+          (click)="moveCenter(actionMove.UP)"
+        >
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="updateZoom(1)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="moveCenter(actionMove.LEFT)">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="updateCenter()">
+          <mat-icon>my_location</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="moveCenter(actionMove.RIGHT)">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          class="col-start-2"
+          (click)="moveCenter(actionMove.DOWN)"
+        >
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="updateZoom(-1)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (typeLocationMap().LocationType !== locationType.CONTROL) {
+    <!-- bottonsAction -->
+    <div #bottonsAction class="flex items-center gap-2 sm:gap-3 pb-5">
+      @if (responsiveService.smallWidth()) {
+        <button
+          mat-mini-fab
+          [ngClass]="selectedAction() === actionMap.VIEW ? 'selected-mini' : ''"
+          (click)="chooseAction(actionMap.VIEW)"
+        >
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          [ngClass]="
+            selectedAction() === actionMap.CREATE ? 'selected-mini' : ''
+          "
+          (click)="chooseAction(actionMap.CREATE)"
+        >
+          <mat-icon>add_location_alt</mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          [ngClass]="
+            selectedAction() === actionMap.UPDATE ? 'selected-mini' : ''
+          "
+          (click)="chooseAction(actionMap.UPDATE)"
+        >
+          <mat-icon>edit_location_alt</mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          [ngClass]="selectedAction() === actionMap.MOVE ? 'selected-mini' : ''"
+          (click)="chooseAction(actionMap.MOVE)"
+        >
+          <mat-icon>pan_tool_alt</mat-icon>
+        </button>
+      } @else {
+        <button
+          mat-fab
+          [ngClass]="selectedAction() === actionMap.VIEW ? 'selected' : ''"
+          (click)="chooseAction(actionMap.VIEW)"
+        >
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button
+          mat-fab
+          [ngClass]="selectedAction() === actionMap.CREATE ? 'selected' : ''"
+          (click)="chooseAction(actionMap.CREATE)"
+        >
+          <mat-icon>add_location_alt</mat-icon>
+        </button>
+        <button
+          mat-fab
+          [ngClass]="selectedAction() === actionMap.UPDATE ? 'selected' : ''"
+          (click)="chooseAction(actionMap.UPDATE)"
+        >
+          <mat-icon>edit_location_alt</mat-icon>
+        </button>
+        <button
+          mat-fab
+          [ngClass]="selectedAction() === actionMap.MOVE ? 'selected' : ''"
+          (click)="chooseAction(actionMap.MOVE)"
+        >
+          <mat-icon>pan_tool_alt</mat-icon>
+        </button>
+      }
+    </div>
+  }
+</div>

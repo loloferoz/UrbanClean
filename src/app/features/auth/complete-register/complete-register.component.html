@@ -1,0 +1,199 @@
+<div class="w-full max-w-lg space-y-10">
+  <mat-card class="px-6 space-y-8" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title i18n="@@complete_register.title"
+        >Complete Sign Up</mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <mat-stepper
+        [orientation]="
+          responsiveService.smallWidth() ? 'vertical' : 'horizontal'
+        "
+      >
+        <mat-step [stepControl]="form">
+          <form
+            [formGroup]="form"
+            class="grid grid-cols-2 gap-2 gap-y-1 gap-x-3 py-4"
+          >
+            <ng-template matStepLabel i18n="@@word.area">Area</ng-template>
+            <!-- Name -->
+            <mat-form-field appearance="outline" class="col-span-2">
+              <mat-label i18n="@@word.name">Name</mat-label>
+              <input
+                matInput
+                i18n-placeholder="@@placeholder.name"
+                placeholder="Name"
+                formControlName="name"
+              />
+              @if (form.get('name')?.hasError('required')) {
+                <mat-error i18n="@@error.name.required"
+                  >Name is required</mat-error
+                >
+              }
+            </mat-form-field>
+
+            <!-- Description -->
+            <mat-form-field appearance="outline" class="col-span-2">
+              <mat-label i18n="@@word.description">Description</mat-label>
+              <textarea
+                matInput
+                i18n-placeholder="@@placeholder.description"
+                placeholder="Descripcion"
+                formControlName="description"
+              ></textarea>
+              @if (form.get('description')?.hasError('required')) {
+                <mat-error i18n="@@error.description.required"
+                  >Descripcion is required</mat-error
+                >
+              }
+            </mat-form-field>
+            <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+              <button
+                mat-flat-button
+                matStepperNext
+                type="button"
+                i18n="@@word.next"
+              >
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="form">
+          <form [formGroup]="form">
+            <ng-template matStepLabel i18n="@@word.client">Client</ng-template>
+            <div
+              formGroupName="client"
+              class="grid grid-cols-2 gap-2 gap-y-1 gap-x-3 py-4"
+            >
+              <!-- Name -->
+              <mat-form-field appearance="outline" class="col-span-2">
+                <mat-label i18n="@@word.name">Name</mat-label>
+                <input
+                  matInput
+                  i18n-placeholder="@@placeholder.name"
+                  placeholder="Name"
+                  formControlName="name"
+                />
+                @if (form.get('client')?.get('name')?.hasError('required')) {
+                  <mat-error i18n="@@error.name.required"
+                    >Name is required</mat-error
+                  >
+                }
+              </mat-form-field>
+
+              <!-- Description -->
+              <mat-form-field appearance="outline" class="col-span-2">
+                <mat-label i18n="@@word.description">Description</mat-label>
+                <textarea
+                  matInput
+                  i18n-placeholder="@@placeholder.description"
+                  placeholder="Descripcion"
+                  formControlName="description"
+                ></textarea>
+                @if (
+                  form.get('client')?.get('description')?.hasError('required')
+                ) {
+                  <mat-error i18n="@@error.description.required"
+                    >Descripcion is required</mat-error
+                  >
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label i18n="@@word.nif">NIF</mat-label>
+                <input
+                  matInput
+                  i18n-placeholder="@@placeholder.nif"
+                  placeholder="NIF"
+                  formControlName="nif"
+                />
+                @if (form.get('client')?.get('nif')?.hasError('required')) {
+                  <mat-error i18n="@@error.nif.required"
+                    >NIF is required</mat-error
+                  >
+                }
+              </mat-form-field>
+
+              <!-- Type of Client -->
+              <mat-form-field appearance="outline">
+                <mat-label i18n="@@word.client_type">Type of Client</mat-label>
+                <mat-select formControlName="clientType">
+                  @for (c of clientTypes; track c) {
+                    <mat-option [value]="c">{{
+                      labelClientType.get(c)
+                    }}</mat-option>
+                  }
+                </mat-select>
+                @if (
+                  form.get('client')?.get('clientType')?.hasError('required')
+                ) {
+                  <mat-error i18n="@@error.client_type.required"
+                    >Type of Client is required</mat-error
+                  >
+                }
+              </mat-form-field>
+            </div>
+            <div class="flex justify-end gap-x-2 py-2">
+              <button
+                mat-stroked-button
+                matStepperPrevious
+                type="button"
+                i18n="@@word.back"
+              >
+                Back
+              </button>
+              <button
+                mat-flat-button
+                matStepperNext
+                type="button"
+                i18n="@@word.next"
+              >
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="form">
+          <form
+            id="formCompleteRegister"
+            [formGroup]="form"
+            (ngSubmit)="completeRegister()"
+          >
+            <ng-template matStepLabel i18n="@@word.address_client"
+              >Client Address</ng-template
+            >
+            <div formGroupName="client">
+              <!-- Address -->
+              <app-address-form
+                controlKey="address"
+                class="col-span-full sm:col-span-1"
+              />
+              <div class="col-span-2 flex justify-end gap-x-2 py-2">
+                <button
+                  mat-stroked-button
+                  matStepperPrevious
+                  type="button"
+                  i18n="@@word.back"
+                >
+                  Back
+                </button>
+                <button
+                  mat-flat-button
+                  type="submit"
+                  form="formCompleteRegister"
+                  i18n="@@complete_register.botton"
+                >
+                  Complete Sign Up
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

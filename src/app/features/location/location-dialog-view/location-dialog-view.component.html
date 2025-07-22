@@ -1,0 +1,39 @@
+<h2 mat-dialog-title i18n="@@word.location">Location</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-3 py-4">
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.address">Address</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl pt-1">
+          <mat-icon aria-hidden="false" [inline]="true">location_on</mat-icon>
+        </div>
+        {{
+          location().city + ', ' + location().street + ' ' + location().number
+        }}
+      </dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.elements">Elements</dt>
+      @for (epl of elementPerLocations(); track epl.id) {
+        <dd class="flex items-center gap-x-2">
+          <div class="text-xl pt-1">
+            @if (epl.element.elementType === elementType.ORGANIC) {
+              <mat-icon
+                matListItemIcon
+                [svgIcon]="'laSolidDumpster'"
+              ></mat-icon>
+            } @else {
+              <mat-icon matListItemIcon>{{ getIcon(epl.element) }}</mat-icon>
+            }
+          </div>
+          {{ epl.element.name }}
+        </dd>
+      }
+    </dl>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

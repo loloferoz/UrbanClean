@@ -1,0 +1,9 @@
+.card-filled {
+  --mdc-outlined-card-outline-width: 0;
+  --mdc-outlined-card-outline-color: transparent;
+  --mdc-outlined-card-container-color: var(--color-surface-container-highest);
+}
+
+.mat-mdc-mini-fab {
+  background-color: var(--color-secondary-container);
+}

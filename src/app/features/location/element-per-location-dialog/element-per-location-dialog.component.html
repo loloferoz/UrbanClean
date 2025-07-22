@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>{{ getTittle() }}</h2>
+<mat-dialog-content>
+  <!-- Type of Element -->
+  <mat-form-field appearance="outline" class="w-full pt-2">
+    <mat-label i18n="@@word.element_type">Type of Element</mat-label>
+    <mat-select [(value)]="elementType" [formControl]="elementTypeControl">
+      <mat-option [value]="" i18n="@@word.none">None</mat-option>
+      @for (et of elementTypes; track et) {
+        <mat-option [value]="et">{{ labelElementType.get(et) }}</mat-option>
+      }
+    </mat-select>
+    @if (this.elementTypeControl.hasError('required')) {
+      <mat-error i18n="@@error.element_type.required"
+        >Type of Element is required</mat-error
+      >
+    }
+  </mat-form-field>
+
+  <form
+    id="formElementPerLocation"
+    [formGroup]="form"
+    (ngSubmit)="emitAction()"
+    class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+  >
+    <!-- Element -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.element">Element</mat-label>
+      <mat-select formControlName="element">
+        @for (element of elements(); track element.id) {
+          <mat-option [value]="element.id">{{ element.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('element')?.hasError('required')) {
+        <mat-error i18n="@@error.element.required"
+          >Element is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Services -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Sector</mat-label>
+      <mat-select formControlName="sectors" multiple>
+        @for (sector of sectors(); track sector.id) {
+          <mat-option [value]="sector.id">{{ sector.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('sectors')?.hasError('required')) {
+        <mat-error i18n="@@error.sectors.required"
+          >Sectors are required</mat-error
+        >
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formElementPerLocation"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

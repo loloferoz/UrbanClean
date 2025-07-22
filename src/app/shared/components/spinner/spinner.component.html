@@ -1,0 +1,10 @@
+@if (spinnerService.isLoading$ | async) {
+  <div
+    class="fixed h-full w-full top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center justify-center bg-surface opacity-50"
+  ></div>
+  <div
+    class="fixed h-full w-full top-0 left-0 right-0 bottom-0 z-50 flex flex-col items-center justify-center"
+  >
+    <mat-spinner></mat-spinner>
+  </div>
+}

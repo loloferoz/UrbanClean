@@ -1,0 +1,21 @@
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  background-color: var(--color-surface-container-low);
+}
+
+.selected {
+  font-variation-settings: 'FILL' 1;
+  height: 64px;
+  width: 64px;
+}
+
+.selected-mini {
+  font-variation-settings: 'FILL' 1;
+  height: 44px;
+  width: 44px;
+}
+
+.dumpster-mini {
+    height: 20px;
+    width: 20px;
+}

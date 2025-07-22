@@ -1,0 +1,71 @@
+<mat-card appearance="outlined">
+  <mat-card-content class="overflow-x-auto">
+    <table mat-table matSort [dataSource]="dataSource">
+      @for (column of tableColumns().columns; track $index) {
+        <ng-container [matColumnDef]="column">
+          @if (tableColumns().sortables.includes(column)) {
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ tableColumns().labels[$index] }}
+            </th>
+          } @else {
+            <th mat-header-cell *matHeaderCellDef>
+              {{ tableColumns().labels[$index] }}
+            </th>
+          }
+
+          <td mat-cell *matCellDef="let element">
+            @if (tableColumns().chips?.includes(column)) {
+              <mat-chip>{{ element[column] }}</mat-chip>
+            } @else if (tableColumns().date?.includes(column)) {
+              {{ element[column] | date: 'mediumDate' }}
+            } @else if (tableColumns().time?.includes(column)) {
+              {{ element[column] | date: 'shortTime' }}
+            } @else if (column === 'image') {
+              <img
+                class="size-9 rounded-md"
+                [src]="element.image | imagePath"
+                [alt]="element.name"
+              />
+            } @else {
+              {{ element[column] }}
+            }
+            @if (column === 'action') {
+              <button mat-icon-button [matMenuTriggerFor]="menuAction">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menuAction="matMenu">
+                @if (tableColumns().actions.view) {
+                  <button mat-menu-item (click)="view(element.id)">
+                    <mat-icon>visibility</mat-icon>
+                    <span i18n="@@word.view">View</span>
+                  </button>
+                }
+                @if (tableColumns().actions.update) {
+                  <button mat-menu-item (click)="update(element.id)">
+                    <mat-icon>edit</mat-icon>
+                    <span i18n="@@word.edit">Edit</span>
+                  </button>
+                }
+                @if (tableColumns().actions.delete) {
+                  <button mat-menu-item (click)="delete(element.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span i18n="@@word.delete"> Delete </span>
+                  </button>
+                }
+              </mat-menu>
+            }
+          </td>
+        </ng-container>
+      }
+
+      <tr mat-header-row *matHeaderRowDef="tableColumns().columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: tableColumns().columns"></tr>
+    </table>
+    <mat-paginator
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 15, 20]"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

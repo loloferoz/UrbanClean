@@ -1,0 +1,114 @@
+<div class="flex flex-row justify-between items-center mb-3">
+  <h2 mat-dialog-title>{{ getTittle() }}</h2>
+  <div class="absolute top-[20px] right-[20px] ng-star-inserted">
+    <button mat-icon-button mat-dialog-close type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-dialog-content>
+  <mat-stepper
+    [orientation]="responsiveService.smallWidth() ? 'vertical' : 'horizontal'"
+  >
+    <mat-step>
+      <form [formGroup]="form" class="grid grid-cols-2 gap-2 py-4">
+        <ng-template matStepLabel i18n="@@word.incidence"
+          >Incidence</ng-template
+        >
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.description">Description</mat-label>
+          <textarea
+            matInput
+            i18n-placeholder="@@placeholder.description"
+            placeholder="Descripcion"
+            formControlName="description"
+          ></textarea>
+          @if (form.get('description')?.hasError('required')) {
+            <mat-error i18n="@@error.description.required"
+              >Descripcion is required</mat-error
+            >
+          }
+        </mat-form-field>
+
+        <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+          <button
+            mat-flat-button
+            matStepperNext
+            type="button"
+            i18n="@@word.next"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form [formGroup]="form" class="grid grid-cols-2 gap-2 py-4">
+        <ng-template matStepLabel i18n="@@word.location">Location</ng-template>
+        <app-location-form
+          controlKey="location"
+          [data]="this.data.currentLocation"
+          class="col-span-2"
+        ></app-location-form>
+        <div class="col-span-2 flex justify-end gap-x-2 py-2">
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            type="button"
+            i18n="@@word.back"
+          >
+            Back
+          </button>
+          <button
+            mat-flat-button
+            matStepperNext
+            type="button"
+            i18n="@@word.next"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form
+        id="formIncidentOperator"
+        [formGroup]="form"
+        (ngSubmit)="emitAction()"
+        class="grid grid-cols-2 gap-2 py-4"
+      >
+        <ng-template matStepLabel i18n="@@word.image">Image</ng-template>
+
+        <!-- Image -->
+        <app-image-input
+          class="col-span-2 mr-auto"
+          [selectedImage]="image"
+          (fileEmitter)="setFile($event)"
+          [hasError]="
+            form.get('image')?.touched &&
+            form.get('image')?.hasError('required')
+          "
+        />
+        <div class="col-span-2 flex justify-end gap-x-2 py-2">
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            type="button"
+            i18n="@@word.back"
+          >
+            Back
+          </button>
+          <button
+            mat-flat-button
+            type="submit"
+            form="formIncidentOperator"
+            i18n="@@word.ok"
+          >
+            Ok
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>

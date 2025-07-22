@@ -1,0 +1,109 @@
+<div class="w-full max-w-lg space-y-10">
+  <mat-card class="px-6 space-y-8" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title i18n="@@word.login">Log In</mat-card-title>
+      <div class="absolute right-[40px] ng-star-inserted">
+        <button
+          mat-mini-fab
+          i18n-matTooltip="@@login.developer"
+          matTooltip="Developer Mode"
+          type="button"
+          (click)="openBottomSheet()"
+        >
+          <mat-icon>developer_mode</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-3">
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label i18n="@@word.email">E-Mail</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.email"
+            placeholder="E-Mail"
+            formControlName="email"
+            type="email"
+          />
+          <mat-icon matSuffix>email</mat-icon>
+          @if (loginForm.get('email')?.hasError('required')) {
+            <mat-error i18n="@@error.email.required"
+              >Email is required</mat-error
+            >
+          }
+          @if (loginForm.get('email')?.hasError('email')) {
+            <mat-error i18n="@@error.email.is_mail">Invalid email</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label i18n="@@word.password">Password</mat-label>
+          <input
+            matInput
+            i18n-placeholder="@@placeholder.password"
+            placeholder="Password"
+            formControlName="password"
+            [type]="hide() ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (loginForm.get('password')?.hasError('required')) {
+            <mat-error i18n="@@error.password.required"
+              >Password is required</mat-error
+            >
+          }
+          @if (loginForm.get('password')?.hasError('minlength')) {
+            <mat-error i18n="@@error.password.minlength"
+              >Password should contain more than 8 letters</mat-error
+            >
+          }
+          @if (loginForm.get('password')?.hasError('maxlength')) {
+            <mat-error i18n="@@error.password.maxlength"
+              >Password should contain less than 25 letters</mat-error
+            >
+          }
+        </mat-form-field>
+        @if (loginError()) {
+          <mat-error>{{ loginError() }}</mat-error>
+        }
+        <div class="flex justify-end pb-1.5">
+          <a
+            routerLink="/auth/forgot-password"
+            class="text-sm font-medium text-tertiary hover:underline"
+            i18n="@@login.forgot_password"
+            >Forgot password?</a
+          >
+        </div>
+        <button
+          mat-flat-button
+          type="submit"
+          class="w-full"
+          i18n="@@word.sign_in"
+        >
+          Sign in
+        </button>
+        <div class="flex justify-start items-center gap-2 py-1.5">
+          <p class="text-sm font-light" i18n="@@login.acconunt">
+            Don’t have an account yet?
+          </p>
+          <a
+            routerLink="/auth/register"
+            class="text-sm font-medium text-tertiary hover:underline"
+            i18n="@@word.Sign_up"
+          >
+            Sign Up
+          </a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

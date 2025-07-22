@@ -1,0 +1,107 @@
+<h2 mat-dialog-title i18n="@@word.incidence">Incidence</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-3 py-4">
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.description">Description</dt>
+      <dd>{{ incident().description }}</dd>
+    </dl>
+    @if (incident().instruction) {
+      <dl class="col-span-2">
+        <dt class="font-semibold" i18n="@@word.instruction">Instruction</dt>
+        <dd>{{ incident().instruction }}</dd>
+      </dl>
+    }
+    @if (incident().observation) {
+      <dl class="col-span-2">
+        <dt class="font-semibold" i18n="@@word.observation">Observation</dt>
+        <dd>{{ incident().observation }}</dd>
+      </dl>
+    }
+    <dl class="col-span-1">
+      <dt class="font-semibold" i18n="@@word.incident_status">
+        Status of incidence
+      </dt>
+      <dd class="mt-1">
+        <mat-chip>{{
+          labelIncidentStatus.get(incident().incidentStatus)
+        }}</mat-chip>
+      </dd>
+    </dl>
+    <dl class="col-span-2 sm:col-span-1">
+      <dt class="font-semibold" i18n="@@word.incident_priority">
+        Priority of incidence
+      </dt>
+      <dd class="mt-1">
+        <mat-chip>{{
+          labelIncidentPriority.get(incident().incidentPriority)
+        }}</mat-chip>
+      </dd>
+    </dl>
+    <dl class="col-span-1">
+      <dt class="font-semibold" i18n="@@word.start">Start</dt>
+      <dd>{{ incident().start | date: 'longDate' }}</dd>
+    </dl>
+    @if (incident().finish) {
+      <dl class="col-span-1">
+        <dt class="font-semibold" i18n="@@word.finish">Finish</dt>
+        <dd>{{ incident().finish | date: 'longDate' }}</dd>
+      </dl>
+    }
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.who_created_it">
+        Incident creator
+      </dt>
+      <dd>
+        {{
+          incident().whoCreatedIt.name + ' ' + incident().whoCreatedIt.surname
+        }}
+      </dd>
+    </dl>
+    @if (incident().whoIsResponsible) {
+      <dl class="col-span-2">
+        <dt class="font-semibold" i18n="@@word.who_is_responsible">
+          Incident manager
+        </dt>
+        <dd>
+          {{
+            incident().whoIsResponsible.name +
+              ' ' +
+              incident().whoIsResponsible.surname
+          }}
+        </dd>
+      </dl>
+    }
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.address">Address</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl">
+          <mat-icon aria-hidden="false" [inline]="true">location_on</mat-icon>
+        </div>
+        {{
+          incident().location.city +
+            ', ' +
+            incident().location.street +
+            ' ' +
+            incident().location.number
+        }}
+      </dd>
+    </dl>
+    <img
+      [src]="incident().firstImage.path || '' | imagePath"
+      alt="card image"
+      class="size-40 rounded-md border border-outline"
+    />
+    @if (incident().lastImage) {
+      <img
+        [src]="incident().lastImage.path || '' | imagePath"
+        alt="card image"
+        class="size-40 rounded-md border border-outline"
+      />
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

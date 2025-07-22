@@ -1,0 +1,16 @@
+<section>
+  <app-header-table
+    [iconCreate]="iconCreate"
+    [labelCreate]="labelCreate"
+    [showButtom]="isAdmin"
+    (newItem)="create()"
+  >
+    <app-filter-table [(filter)]="valueToFilter" />
+  </app-header-table>
+  <app-base-table
+    [data]="tableUsers()"
+    [tableColumns]="tableColumns"
+    [valueFiltered]="valueToFilter()"
+    (actionTable)="action($event)"
+  />
+</section>

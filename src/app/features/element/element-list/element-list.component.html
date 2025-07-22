@@ -1,0 +1,15 @@
+<section>
+  <app-header-table
+    [iconCreate]="iconCreate"
+    [labelCreate]="labelCreate"
+    (newItem)="create()"
+  >
+    <app-filter-table [(filter)]="valueToFilter" />
+  </app-header-table>
+  <app-base-table
+    [data]="elements()"
+    [tableColumns]="tableColumns"
+    [valueFiltered]="valueToFilter()"
+    (actionTable)="action($event)"
+  />
+</section>

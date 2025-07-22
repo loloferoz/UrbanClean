@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ getTittle() }}</h2>
+<mat-dialog-content>
+  <form id="formLocation" [formGroup]="form" (ngSubmit)="emitAction()">
+    <app-location-form
+      controlKey="location"
+      [data]="this.data.location"
+      class="w-full"
+    ></app-location-form>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formLocation"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

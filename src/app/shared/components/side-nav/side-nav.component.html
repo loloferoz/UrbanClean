@@ -1,0 +1,80 @@
+<div class="flex flex-col justify-between h-full ml-2 mr-4">
+  <div>
+    @if (authStatus().isAuthenticated && responsiveService.smallWidth()) {
+      <div class="flex items-center gap-2 pt-4 px-2">
+        <div class="ml-3 font-medium">
+          <mat-icon class="icon-fill">account_circle</mat-icon>
+        </div>
+        <div class="w-full p-3">
+          <p class="text-sm font-medium">{{ user()?.name }}</p>
+          <p class="text-sm truncat">{{ user()?.surname }}</p>
+        </div>
+      </div>
+    }
+    <mat-nav-list>
+      @if (authStatus().userRole === userRole.ADMIN) {
+        <a
+          class="m-1 w-full"
+          mat-list-item
+          [routerLink]="'/manager/center'"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [activated]="rla.isActive"
+          (click)="toggleSidebar()"
+        >
+          <mat-icon matListItemIcon>home_work</mat-icon>
+          <span i18n="@@word.centers" matListItemTitle>Centers</span>
+        </a>
+      }
+
+      @if (
+        authStatus().userRole === userRole.ADMIN ||
+        authStatus().userRole === userRole.MANAGER
+      ) {
+        @for (item of menuManager; track item) {
+          <a
+            class="m-1 w-full"
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive
+            #rla="routerLinkActive"
+            [activated]="rla.isActive"
+            (click)="toggleSidebar()"
+          >
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      }
+      @if (authStatus().userRole === userRole.OPERATOR) {
+        @for (item of menuOperator; track item) {
+          <a
+            class="m-1 w-full"
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive
+            #rla="routerLinkActive"
+            [activated]="rla.isActive"
+            (click)="toggleSidebar()"
+          >
+            @if (item.icon === 'laSolidDumpster') {
+              <mat-icon matListItemIcon [svgIcon]="item.icon"></mat-icon>
+            } @else {
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            }
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      }
+    </mat-nav-list>
+  </div>
+  <div class="flex gap-4 mb-5 ml-5">
+    <a href="https://github.com/loloferoz/UrbanClean"
+      ><mat-icon svgIcon="angular-icon"><</mat-icon></a
+    >
+    <a href="https://github.com/loloferoz/UrbanClean-API"
+      ><mat-icon svgIcon="nestjs-icon"></mat-icon
+    ></a>
+    <a [href]="documentUrl"><mat-icon svgIcon="pdf-icon"></mat-icon></a>
+  </div>
+</div>

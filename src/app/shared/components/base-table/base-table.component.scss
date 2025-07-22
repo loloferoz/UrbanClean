@@ -1,0 +1,8 @@
+.mat-column-name,
+.mat-column-description,
+.mat-column-street,
+.mat-mdc-header-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

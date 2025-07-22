@@ -1,0 +1,45 @@
+<div class="p-4">
+  <div class="text-lg font-semibold" i18n="@@login.developer">Developer Mode</div>
+  <div class="pt-4">
+      <mat-slide-toggle
+        i18n="@@login.developer_remove"
+        checked="false"
+        (change)="mapService.setProximityRestriction($event.checked)">
+      Do you want to remove the proximity restriction on the map?
+    </mat-slide-toggle>
+  </div>
+  <div class="font-medium pt-8" i18n="@@login.developer_choose">
+    Choose a user by their role
+  </div>
+</div>
+<mat-nav-list>
+  <a href="" mat-list-item (click)="setUser(userRole.ADMIN, $event)">
+    <mat-icon matListItemIcon>person</mat-icon>
+    <span matListItemTitle>{{ labelUserRole.get(userRole.ADMIN) }}</span>
+    <span matListItemLine>Cristóbal Alcalá Carranza</span>
+  </a>
+
+  <a href="" mat-list-item (click)="setUser(contractCategory.FOREMAN, $event)">
+    <mat-icon matListItemIcon>person</mat-icon>
+    <span matListItemTitle>{{
+      labelContractCategory.get(contractCategory.FOREMAN)
+    }}</span>
+    <span matListItemLine>Manu Blanco Durán</span>
+  </a>
+
+  <a href="" mat-list-item (click)="setUser(contractCategory.DRIVER, $event)">
+    <mat-icon matListItemIcon>person</mat-icon>
+    <span matListItemTitle>{{
+      labelContractCategory.get(contractCategory.DRIVER)
+    }}</span>
+    <span matListItemLine>Javier Berrocal Lastra</span>
+  </a>
+
+  <a href="" mat-list-item (click)="setUser(contractCategory.PAWN, $event)">
+    <mat-icon matListItemIcon>person</mat-icon>
+    <span matListItemTitle>{{
+      labelContractCategory.get(contractCategory.PAWN)
+    }}</span>
+    <span matListItemLine>Rosa María Vallejo Prat</span>
+  </a>
+</mat-nav-list>

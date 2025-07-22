@@ -1,0 +1,29 @@
+<h2 mat-dialog-title i18n="@@word.element">Element</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-3 py-4">
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.name">Name</dt>
+      <dd>{{ element().name }}</dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.description">Description</dt>
+      <dd>{{ element().description }}</dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.element_type">Type of Element</dt>
+      <dd class="mt-1">
+        <mat-chip>{{ labelElementType.get(element().elementType) }}</mat-chip>
+      </dd>
+    </dl>
+  </div>
+  <img
+    [src]="element().image?.path || '' | imagePath"
+    alt="card image"
+    class="size-40 rounded-md border border-outline"
+  />
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

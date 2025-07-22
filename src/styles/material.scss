@@ -1,0 +1,83 @@
+@use '@angular/material' as mat;
+
+@use './m3-theme' as m3;
+@use './colors';
+
+@include mat.core();
+
+:root {
+  @include mat.all-component-themes(m3.$light-theme);
+  @include colors.theme-colors(m3.$light-theme);
+}
+
+.dark {
+  @include mat.all-component-colors(m3.$dark-theme);
+  @include colors.theme-colors(m3.$dark-theme);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto Flex', 'Helvetica Neue', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--md-sys-color-outline-variant)
+    var(--md-sys-color-surface);
+}
+body::-webkit-scrollbar-track {
+  background: var(--md-sys-color-surface);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--md-sys-color-surface);
+  border-radius: 6px;
+  border: 3px solid var(--md-sys-color-surface);
+}
+
+.icon-fill {
+  font-variation-settings: 'FILL' 1;
+}
+
+.icon-wght-200 {
+  font-variation-settings: 'wght' 200;
+}
+
+.icon-wght-300 {
+  font-variation-settings: 'wght' 300;
+}
+
+mat-icon.icon-primary {
+  --mat-icon-color: var(--md-sys-color-primary);
+}
+
+mat-icon.icon-secondary {
+  --mat-icon-color: var(--md-sys-color-secondary);
+}
+
+mat-icon.icon-tertiary {
+  --mat-icon-color: var(--md-sys-color-tertiary);
+}
+
+.dialog-p {
+  @include mat.dialog-overrides(
+    (
+      content-padding: 0 0.625rem,
+    )
+  );
+  @media (min-width: 640px) {
+    @include mat.dialog-overrides(
+      (
+        content-padding: 0 1.25rem,
+      )
+    );
+  }
+}

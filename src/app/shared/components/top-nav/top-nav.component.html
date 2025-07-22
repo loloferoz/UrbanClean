@@ -1,0 +1,124 @@
+<mat-toolbar
+  class="flex flex-wrap justify-between items-center relative z-10 shadow-md"
+>
+  @let isAuthenticated = authStatus().isAuthenticated;
+  <div class="flex items-center gap-2">
+    @if (isAuthenticated) {
+      <div class="lg:hidden">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+    }
+    <a routerLink="/">
+      <span class="self-center text-on-secondary-container text-2xl"
+        >UrbanClean</span
+      >
+    </a>
+    @if (isAuthenticated) {
+      <span class="hidden lg:block">|</span>
+      <span class="hidden lg:block">{{ area()?.name }}</span>
+    }
+  </div>
+  <div class="flex items-center sm:gap-4">
+    @if (isAuthenticated) {
+      <div>
+        <span class="hidden md:block"
+          >{{ user()?.name }} {{ user()?.surname }}</span
+        >
+      </div>
+      <button mat-icon-button [matMenuTriggerFor]="menuIncidents">
+        <mat-icon
+          aria-hidden="false"
+          [matBadge]="countIncidents()"
+          [matBadgeHidden]="countIncidents() === 0 ? true : false"
+          >notifications</mat-icon
+        >
+      </button>
+      <mat-menu #menuIncidents="matMenu" xPosition="before">
+        @for (incident of incidents(); track incident.id) {
+          <button mat-menu-item>{{ incident.description }}</button>
+        }
+      </mat-menu>
+      <button mat-icon-button [matMenuTriggerFor]="menuOptions">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menuOptions="matMenu">
+        @if (themeService.isDark()) {
+          <button
+            mat-menu-item
+            (click)="themeService.updateTheme(themes.LIGHT)"
+          >
+            <mat-icon>light_mode</mat-icon>
+            <span i18n="@@word.light_mode">Light Mode</span>
+          </button>
+        } @else {
+          <button mat-menu-item (click)="themeService.updateTheme(themes.DARK)">
+            <mat-icon>dark_mode</mat-icon>
+            <span i18n="@@word.dark_mode">Dark Mode</span>
+          </button>
+        }
+        <button mat-menu-item [matMenuTriggerFor]="language">
+          <mat-icon>language</mat-icon>
+          <span i18n="@@word.language">Language</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/auth/logout">
+          <mat-icon>logout</mat-icon>
+          <span i18n="@@word.logout">Logout</span>
+        </button>
+      </mat-menu>
+      <mat-menu #language="matMenu">
+        <button mat-menu-item (click)="changeLanguage(languages.EN)">
+          <mat-icon svgIcon="flag-gb" class="rounded"></mat-icon>
+          <span i18n="@@word.english">English</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage(languages.ES)">
+          <mat-icon svgIcon="flag-es" class="rounded"></mat-icon>
+          <span i18n="@@word.spanish">Spanish</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage(languages.CA)">
+          <mat-icon svgIcon="flag-ca" class="rounded"></mat-icon>
+          <span i18n="@@word.catalan">Catalan</span>
+        </button>
+      </mat-menu>
+    } @else {
+      <button mat-icon-button [matMenuTriggerFor]="menuLanguage">
+        <mat-icon>language</mat-icon>
+      </button>
+      <mat-menu #menuLanguage="matMenu">
+        <button mat-menu-item (click)="changeLanguage(languages.EN)">
+          <mat-icon svgIcon="flag-gb" class="rounded"></mat-icon>
+          <span i18n="@@word.english">English</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage(languages.ES)">
+          <mat-icon svgIcon="flag-es" class="rounded"></mat-icon>
+          <span i18n="@@word.spanish">Spanish</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage(languages.CA)">
+          <mat-icon svgIcon="flag-ca" class="rounded"></mat-icon>
+          <span i18n="@@word.catalan">Catalan</span>
+        </button>
+      </mat-menu>
+      @if (themeService.isDark()) {
+        <button
+          mat-icon-button
+          (click)="themeService.updateTheme(themes.LIGHT)"
+        >
+          <mat-icon>light_mode</mat-icon>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="themeService.updateTheme(themes.DARK)">
+          <mat-icon>dark_mode</mat-icon>
+        </button>
+      }
+      <a
+        mat-stroked-button
+        routerLink="/auth/login"
+        i18n="@@word.login"
+        class="ml-2 sm:ml-0"
+        >Log In</a
+      >
+    }
+  </div>
+</mat-toolbar>

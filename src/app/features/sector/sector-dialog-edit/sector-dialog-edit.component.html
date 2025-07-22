@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ getTittle() }}</h2>
+<mat-dialog-content>
+  <form
+    id="formSector"
+    [formGroup]="form"
+    (ngSubmit)="emitAction()"
+    class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+  >
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.name">Name</mat-label>
+      <input
+        matInput
+        i18n-placeholder="@@placeholder.name"
+        placeholder="Name"
+        formControlName="name"
+      />
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error i18n="@@error.name.required">Name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label i18n="@@word.description">Description</mat-label>
+      <textarea
+        matInput
+        i18n-placeholder="@@placeholder.description"
+        placeholder="Descripcion"
+        formControlName="description"
+      ></textarea>
+      @if (form.get('description')?.hasError('required')) {
+        <mat-error i18n="@@error.description.required"
+          >Descripcion is required</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <!-- Service -->
+    <mat-form-field appearance="outline" class="col-span-2 md:col-span-2">
+      <mat-label i18n="@@word.hired_service">Service</mat-label>
+      <mat-select formControlName="hiredService">
+        @for (hiredService of hiredServices(); track hiredService) {
+          <mat-option [value]="hiredService.id">{{
+            hiredService.name
+          }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('hiredService')?.hasError('required')) {
+        <mat-error i18n="@@error.hired_service.required"
+          >Service is required</mat-error
+        >
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+  <button
+    mat-flat-button
+    cdkFocusInitial
+    type="submit"
+    form="formSector"
+    i18n="@@word.ok"
+  >
+    Ok
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,8 @@
+<mat-nav-list>
+  @for (epl of data.location.elementPerLocations; track epl.id) {
+    <a href="" mat-list-item (click)="getElement(epl, $event)">
+      <span matListItemTitle>{{ epl.element.name }}</span>
+      <span matLine>{{ epl.element.elementType + ' id: ' + epl.id }}</span>
+    </a>
+  }
+</mat-nav-list>

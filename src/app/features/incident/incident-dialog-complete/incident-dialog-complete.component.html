@@ -1,0 +1,132 @@
+<div class="flex flex-row justify-between items-center mb-3">
+  <h2 mat-dialog-title i18n="@@incident.complete">Complete the incident</h2>
+  <div class="absolute top-[20px] right-[20px] ng-star-inserted">
+    <button mat-icon-button mat-dialog-close type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-dialog-content class="dialog-p">
+  <mat-stepper
+    [orientation]="responsiveService.smallWidth() ? 'vertical' : 'horizontal'"
+  >
+    <mat-step>
+      <ng-template matStepLabel>Resum</ng-template>
+      <ng-template matStepContent>
+        <div class="grid grid-cols-2 gap-5 py-4">
+          <div class="col-span-2 flex flex-col sm:flex-row sm:items-end gap-5">
+            <img
+              [src]="data.location.incident?.firstImage?.path || '' | imagePath"
+              alt="card image"
+              class="size-40 rounded-md border border-outline"
+            />
+            <div class="w-full">
+              <dl>
+                <dt class="font-semibold" i18n="@@word.address">Address</dt>
+                <dd class="flex items-center gap-x-2">
+                  <div class="text-xl">
+                    <mat-icon aria-hidden="false" [inline]="true"
+                      >location_on</mat-icon
+                    >
+                  </div>
+                  {{
+                    data.location.city +
+                      ', ' +
+                      data.location.street +
+                      ' ' +
+                      data.location.number
+                  }}
+                </dd>
+              </dl>
+              <div class="flex justify-between items-center">
+                <dl>
+                  <dt class="font-semibold" i18n="@@word.start">Start</dt>
+                  <dd class="flex items-center gap-x-2">
+                    <div class="text-xl">
+                      <mat-icon aria-hidden="false" [inline]="true"
+                        >calendar_month</mat-icon
+                      >
+                    </div>
+                    {{ data.location.incident?.start | date }}
+                  </dd>
+                </dl>
+                <mat-chip>{{
+                  data.location.incident?.incidentPriority
+                }}</mat-chip>
+              </div>
+            </div>
+          </div>
+          <dl class="col-span-2">
+            <dt class="font-semibold" i18n="@@word.description">Description</dt>
+            <dd class="">{{ data.location.incident?.description }}</dd>
+          </dl>
+          <dl class="col-span-2">
+            <dt class="font-semibold" i18n="@@word.instruction">Instruction</dt>
+            <dd class="">{{ data.location.incident?.instruction }}</dd>
+          </dl>
+          <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+            <button
+              mat-flat-button
+              matStepperNext
+              type="button"
+              i18n="@@word.next"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </mat-step>
+    <mat-step [stepControl]="form">
+      <form
+        [formGroup]="form"
+        (ngSubmit)="emitAction()"
+        class="grid grid-cols-2 gap-y-1 gap-x-3 pt-2"
+      >
+        <ng-template matStepLabel i18n="@@word.complete_inincident"
+          >Complete incident</ng-template
+        >
+
+        <!-- Observation -->
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label i18n="@@word.observation">Observation</mat-label>
+          <textarea
+            matInput
+            i18n-placeholder="@@placeholder.observation"
+            placeholder="Observation"
+            formControlName="observation"
+          ></textarea>
+        </mat-form-field>
+
+        <!-- Image -->
+        <app-image-input
+          class="col-span-2 mr-auto"
+          [selectedImage]="image"
+          (fileEmitter)="setFile($event)"
+          [hasError]="
+            form.get('image')?.touched &&
+            form.get('image')?.hasError('required')
+          "
+        />
+        <div class="col-span-2 flex justify-end gap-x-2 py-2">
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            type="button"
+            i18n="@@word.back"
+          >
+            Back
+          </button>
+          <button
+            mat-flat-button
+            cdkFocusInitial
+            type="submit"
+            i18n="@@word.ok"
+          >
+            Ok
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>

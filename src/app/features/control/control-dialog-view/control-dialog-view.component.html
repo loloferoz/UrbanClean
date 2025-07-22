@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Control</h2>
+<mat-dialog-content>
+<img
+    [src]="control().image.path || '' | imagePath"
+    alt="card image"
+    class="size-70 rounded-md border border-outline m-auto"
+  />
+  <div class="grid grid-cols-2 gap-3 pt-8 pb-4">
+    @if(control().observation) {
+        <dl class="col-span-2">
+          <dt class="font-semibold" i18n="@@word.observation">Observation</dt>
+          <dd>{{ control().observation }}</dd>
+        </dl>
+    }
+    <dl class="col-span-2 flex items-center">
+      <dt class="font-semibold" i18n="@@word.control_status">Control Status</dt>
+      <dd class="ml-4">
+        <mat-chip>{{ labelControlStatus.get(control().controlStatus) }}</mat-chip>
+      </dd>
+    </dl>
+    <dl class="col-span-2">
+      <dt class="font-semibold" i18n="@@word.address">Address</dt>
+      <dd class="flex items-center gap-x-2">
+        <div class="text-xl">
+          <mat-icon aria-hidden="false" [inline]="true">location_on</mat-icon>
+        </div>
+        {{
+          control().elementPerLocation.location.city +
+            ', ' +
+            control().elementPerLocation.location.street +
+            ' ' +
+            control().elementPerLocation.location.number
+        }}
+      </dd>
+    </dl>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

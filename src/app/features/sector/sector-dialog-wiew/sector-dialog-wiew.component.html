@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>sector View</h2>
+<mat-dialog-content>
+  <div>id: {{ sector().id }}</div>
+  <div>name: {{ sector().name }}</div>
+  <div>description: {{ sector().description }}</div>
+  <div>hireService</div>
+  <div>id: {{ sector().hiredService?.id }}</div>
+  <div>name: {{ sector().hiredService?.name }}</div>
+  <div>description: {{ sector().hiredService?.description }}</div>
+  <div>hiredServiceType: {{ sector().hiredService?.hiredServiceType }}</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close type="button" i18n="@@word.close">
+    Close
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,354 @@
+<div class="flex items-stretch flex-wrap w-full h-full mx-auto">
+  @if (!registered()) {
+    <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div
+        class="md:col-span-6 flex flex-col items-center justify-center pb-0 md:pb-15"
+      >
+        <div class="max-w-lg pt-5 md:p-5">
+          <h2 class="text-3xl font-bold mb-8" i18n="@@register.title.important">
+            Important Information
+          </h2>
+          <div class="space-y-8">
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <mat-icon class="text-4xl text-primary-600">info</mat-icon>
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-semibold mb-2"
+                  i18n="@@register.title.administrator"
+                >
+                  Administrator Privileges
+                </h3>
+                <p i18n="@@register.boldy.administrator">
+                  Registration grants you administrative access to manage your
+                  organization's workspace. You'll have full control over user
+                  permissions, content management, and system settings.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <mat-icon class="text-4xl">security</mat-icon>
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-semibold mb-2"
+                  i18n="@@register.title.area"
+                >
+                  Workspace Generation
+                </h3>
+                <p i18n="@@register.body.area">
+                  When you sign up, you'll need to create a dedicated workspace
+                  for your organization.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <mat-icon class="text-4xl">devices</mat-icon>
+              </div>
+              <div>
+                <h3
+                  class="text-xl font-semibold mb-2"
+                  i18n="@@register.title.client"
+                >
+                  Client Implementation
+                </h3>
+                <p i18n="@@register.body.client">
+                  After registration, you will need to enter the information of
+                  at least one customer to complete the initial setup of your
+                  account.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="md:col-span-6 place-items-center flex flex-col items-center justify-center"
+      >
+        <mat-card class="w-full max-w-lg px-6 space-y-2" appearance="outlined">
+          <mat-card-header>
+            <mat-card-title i18n="@@register.title"
+              >Create your Account</mat-card-title
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <mat-stepper
+              [orientation]="
+                responsiveService.smallWidth() ? 'vertical' : 'horizontal'
+              "
+            >
+              <mat-step [stepControl]="registerForm">
+                <form
+                  [formGroup]="registerForm"
+                  class="grid grid-cols-2 gap-2 gap-y-1 gap-x-3 py-4"
+                >
+                  <ng-template matStepLabel i18n="@@word.personal"
+                    >Personal</ng-template
+                  >
+                  <!-- Name -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.name">Name</mat-label>
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.name"
+                      placeholder="Name"
+                      formControlName="name"
+                    />
+                    <mat-icon matSuffix>perm_identity</mat-icon>
+                    @if (registerForm.get('name')?.hasError('required')) {
+                      <mat-error i18n="@@error.name.required"
+                        >Name is required</mat-error
+                      >
+                    }
+                  </mat-form-field>
+
+                  <!-- Surname -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.surname">Surname</mat-label>
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.surname"
+                      placeholder="Surname"
+                      formControlName="surname"
+                    />
+                    <mat-icon matSuffix>perm_identity</mat-icon>
+                    @if (registerForm.get('surname')?.hasError('required')) {
+                      <mat-error i18n="@@error.surname.required"
+                        >Surname is required</mat-error
+                      >
+                    }
+                  </mat-form-field>
+
+                  <!-- Date -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.date">Date</mat-label>
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.date"
+                      placeholder="DD/MM/YYYY"
+                      formControlName="dateOfBirth"
+                      [matDatepicker]="dateOfBirthPicker"
+                    />
+                    <mat-datepicker-toggle
+                      matIconSuffix
+                      [for]="dateOfBirthPicker"
+                    />
+                    <mat-datepicker #dateOfBirthPicker />
+                    @if (
+                      registerForm.get('dateOfBirth')?.errors?.['required']
+                    ) {
+                      <mat-error i18n="@@error.date.required"
+                        >Birth date is required</mat-error
+                      >
+                    }
+                    @if (
+                      !registerForm.get('dateOfBirth')?.errors?.['required'] &&
+                        registerForm.get('dateOfBirth')?.errors?.['ageTooLow'];
+                      as ageTooLow
+                    ) {
+                      <mat-error i18n="@@error.date.age_too_low"
+                        >You have to be {{ ageTooLow.requiredAge }} or older to
+                        access this site.</mat-error
+                      >
+                    }
+                  </mat-form-field>
+
+                  <div class="col-span-2 flex justify-end gap-x-2 pt-2">
+                    <button
+                      mat-flat-button
+                      matStepperNext
+                      type="button"
+                      i18n="@@word.next"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="registerForm">
+                <form [formGroup]="registerForm">
+                  <ng-template matStepLabel i18n="@@word.address"
+                    >Address</ng-template
+                  >
+                  <!-- Address -->
+                  <app-address-form controlKey="address" />
+                  <div class="flex justify-end gap-x-2 py-2">
+                    <button
+                      mat-stroked-button
+                      matStepperPrevious
+                      type="button"
+                      i18n="@@word.back"
+                    >
+                      Back
+                    </button>
+                    <button
+                      mat-flat-button
+                      matStepperNext
+                      type="button"
+                      i18n="@@word.next"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="registerForm">
+                <form
+                  id="formRegister"
+                  [formGroup]="registerForm"
+                  (ngSubmit)="register()"
+                  class="grid grid-cols-2 gap-y-1 gap-x-3 py-4"
+                >
+                  <ng-template matStepLabel i18n="@@word.account"
+                    >Account</ng-template
+                  >
+                  <!-- Email -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.email">E-Mail</mat-label>
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.email"
+                      placeholder="E-Mail"
+                      formControlName="email"
+                      type="email"
+                    />
+                    <mat-icon matSuffix>email</mat-icon>
+                    @if (registerForm.get('email')?.hasError('required')) {
+                      <mat-error i18n="@@error.email.required"
+                        >Email is required</mat-error
+                      >
+                    }
+                    @if (registerForm.get('email')?.errors?.['email']) {
+                      <mat-error i18n="@@error.email.is_mail"
+                        >Invalid email</mat-error
+                      >
+                    }
+                    @if (
+                      !registerForm.get('email')?.errors?.['email'] &&
+                      registerForm.get('email')?.errors?.['emailDomain']
+                    ) {
+                      <mat-error i18n="@@error.email.email_domain"
+                        >Please use allowed google domains</mat-error
+                      >
+                    }
+                  </mat-form-field>
+
+                  <!-- Password -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.password">Password</mat-label>
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.password"
+                      placeholder="Password"
+                      formControlName="password"
+                      [type]="hide() ? 'password' : 'text'"
+                    />
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      type="button"
+                      (click)="clickEvent($event)"
+                      [attr.aria-pressed]="hide()"
+                    >
+                      <mat-icon>{{
+                        hide() ? 'visibility_off' : 'visibility'
+                      }}</mat-icon>
+                    </button>
+                    @if (registerForm.get('password')?.hasError('required')) {
+                      <mat-error i18n="@@error.password.required"
+                        >Password is required</mat-error
+                      >
+                    }
+                    @if (registerForm.get('password')?.hasError('minlength')) {
+                      <mat-error i18n="@@error.password.minlength"
+                        >Password should contain more than 8 letters</mat-error
+                      >
+                    }
+                    @if (registerForm.get('password')?.hasError('maxlength')) {
+                      <mat-error i18n="@@error.password.maxlength"
+                        >Password should contain less than 25 letters</mat-error
+                      >
+                    }
+                  </mat-form-field>
+
+                  <!-- Confirm Password -->
+                  <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-label i18n="@@word.password_confirm"
+                      >Confirm password</mat-label
+                    >
+                    <input
+                      matInput
+                      i18n-placeholder="@@placeholder.password_confirm"
+                      placeholder="Confirm password"
+                      formControlName="confirmPassword"
+                      [type]="hide() ? 'password' : 'text'"
+                    />
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      type="button"
+                      (click)="clickEvent($event)"
+                      [attr.aria-pressed]="hide()"
+                    >
+                      <mat-icon>{{
+                        hide() ? 'visibility_off' : 'visibility'
+                      }}</mat-icon>
+                    </button>
+                    @if (
+                      registerForm.get('confirmPassword')?.hasError('required')
+                    ) {
+                      <mat-error i18n="@@error.password.required"
+                        >Password is required</mat-error
+                      >
+                    }
+                    @if (
+                      registerForm.get('confirmPassword')?.hasError('mismatch')
+                    ) {
+                      <mat-error i18n="@@error.password.mismatch"
+                        >Passwords do not match</mat-error
+                      >
+                    }
+                  </mat-form-field>
+                  @if (formError()) {
+                    <mat-error>{{ formError() }}</mat-error>
+                  }
+                  <mat-checkbox
+                    class="col-span-2"
+                    [formControl]="requiredControl"
+                    i18n="@@register.terms"
+                    >I accept the Terms and Conditions</mat-checkbox
+                  >
+                  <div class="col-span-2 flex justify-end gap-x-2 py-2">
+                    <button
+                      mat-stroked-button
+                      matStepperPrevious
+                      type="button"
+                      i18n="@@word.back"
+                    >
+                      Back
+                    </button>
+                    <button
+                      mat-flat-button
+                      form="formRegister"
+                      type="submit"
+                      i18n="@@word.Sign_up"
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                </form>
+              </mat-step>
+            </mat-stepper>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  } @else {
+    <div class="w-full flex flex-col items-center justify-center px-4 py-12">
+      <app-redirect-register></app-redirect-register>
+    </div>
+  }
+</div>
